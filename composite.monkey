@@ -1,6 +1,6 @@
 Strict
 Import monkey.list
-Import htbaa.goal
+Import goal
 #Rem
     Copyright (c) 2010-2014 Christiaan Kras
 
