@@ -19,12 +19,12 @@ Strict
     LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
     THE SOFTWARE.
-#End Rem
+#End
 
 #Rem
     bbdoc: Base class to create a goal evaluator
-#End Rem
-Class GoalEvaluator Abstract
+#End
+Class GoalEvaluator<T> Abstract
     'when the desirability score for a goal has been evaluated it is multiplied 
     'by this value. It can be used to create bots with preferences based upon
     'their personality
@@ -32,18 +32,18 @@ Class GoalEvaluator Abstract
 
     #Rem
         bbdoc: Object creation
-    #End Rem
+    #End
     Method New(CharacterBias:Float)
         Self.m_dCharacterBias = CharacterBias
     End Method
 
     #Rem
         bbdoc: returns a score between 0 and 1 representing the desirability of the strategy the concrete subclass represents
-    #End Rem
-    Method CalculateDesirability:Float(Owner:Object) Abstract
+    #End
+    Method CalculateDesirability:Float(Owner:T) Abstract
 
     #Rem
         bbdoc: adds the appropriate goal to the given bot's brain
-    #End Rem
-    Method SetGoal:Void(Owner:Object) Abstract
+    #End
+    Method SetGoal:Void(Owner:T) Abstract
 End

@@ -27,20 +27,20 @@ Import exception
 #Rem
     bbdoc: Atomic Goal type
 #End
-Class Goal Abstract
+Class Goal<T> Abstract
     Const STATUS_ACTIVE:Int = 0
     Const STATUS_INACTIVE:Int = 1
     Const STATUS_COMPLETED:Int = 2
     Const STATUS_FAILED:Int = 3
 
     Field m_iType:Int
-    Field m_pOwner:Object
+    Field m_pOwner:T
     Field m_iStatus:Int
 
     #Rem
         bbdoc: note how goals start off in the inactive state
-    #End Rem
-    Method New(pOwner:Object, iType:Int)
+    #End
+    Method New(pOwner:T, iType:Int)
         Self.m_iStatus = STATUS_INACTIVE
         Self.m_pOwner = pOwner
         Self.m_iType = iType
@@ -48,7 +48,7 @@ Class Goal Abstract
 
     #Rem
         bbdoc: if m_iStatus = inactive this method sets it to active and calls Activate()
-    #End Rem
+    #End
     Method ActivateIfInactive:Void()
         If Self.IsInactive()
             Self.Activate()
@@ -57,7 +57,7 @@ Class Goal Abstract
 
     #Rem
         bbdoc: If m_iStatus is failed this Method sets it To inactive so that the goal will be reactivated (And therefore re - planned) on the Next update - Step
-    #End Rem
+    #End
     Method ReactivateIfFailed:Void()
         If Self.hasFailed()
             Self.m_iStatus = STATUS_INACTIVE
@@ -66,71 +66,71 @@ Class Goal Abstract
 
     #Rem
         bbdoc: logic to run when the goal is activated.
-    #End Rem
+    #End
     Method Activate:Void() Abstract
 
     #Rem
         bbdoc: logic to run each update-step
-    #End Rem
+    #End
     Method Process:Int() Abstract
 
     #Rem
         bbdoc: logic To run when the goal is satisfied. (typically used To switch off, For example, any active steering behaviors)
-    #End Rem
+    #End
     Method Terminate:Void() Abstract
 
     #Rem
         bbdoc: goals can handle messages. Many don't though, so this defines a default behavior
-    #End Rem
+    #End
     Method HandleMessage:Int(message:Object)
         Return False
     End Method
 
     #Rem
         bbdoc: a Goal is atomic and cannot aggregate subgoals yet we must implement this method to provide the uniform interface required for the goal hierarchy.
-    #End Rem
+    #End
     Method AddSubgoal:Void(goal:Goal)
         Throw New GoalException("Cannot add goals to atomic goals")
     End Method
 
     #Rem
         bbdoc: Check if goal has been completed
-    #End Rem
+    #End
     Method IsComplete:Int()
         Return Self.m_iStatus = STATUS_COMPLETED
     End Method
 
     #Rem
         bbdoc: Check if goal is still active
-    #End Rem
+    #End
     Method IsActive:Int()
         Return Self.m_iStatus = STATUS_ACTIVE
     End Method
 
     #Rem
         bbdoc: Check if goal is inactive
-    #End Rem
+    #End
     Method IsInactive:Int()
         Return Self.m_iStatus = STATUS_INACTIVE
     End Method
 
     #Rem
         bbdoc: Check if goal failed to perform its tasks
-    #End Rem
+    #End
     Method HasFailed:Int()
         Return Self.m_iStatus = STATUS_FAILED
     End Method
 
     #Rem
         bbdoc: Returns m_iType:Int
-    #End Rem
+    #End
     Method GetType:Int()
         Return Self.m_iType
     End Method
 
     #Rem
         bbdoc: when this Object is destroyed make sure any subgoals are terminated and destroyed
-    #End Rem
+    #End
     Method Destroy:Void()
         Self.m_pOwner = Null
     End Method

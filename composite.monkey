@@ -21,24 +21,24 @@ Import goal
     LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
     THE SOFTWARE.
-#End Rem
+#End
 
 #Rem
     bbdoc: Composite goal type
-#End Rem
-Class GoalComposite Extends Goal Abstract
-    Field m_SubGoals:List<Goal> = New List<Goal>
+#End
+Class GoalComposite<T> Extends Goal<T> Abstract
+    Field m_SubGoals:List<Goal<T>> = New List<Goal<T>>
 
     #Rem
         bbdoc: note how goals start off in the inactive state
-    #End Rem
-    Method New(pOwner:Object, iType:Int)
+    #End
+    Method New(pOwner:T, iType:Int)
         Super.New(pOwner, iType)
     End Method
 
     #Rem
         bbdoc: when this Object is destroyed make sure any subgoals are terminated and destroyed
-    #End Rem
+    #End
     Method Destroy:Void()
         Self.RemoveAllSubgoals()
         Super.Destroy()
@@ -46,18 +46,18 @@ Class GoalComposite Extends Goal Abstract
 
     #Rem
         bbdoc: processes any subgoals that may be present this method first removes any completed goals from the front of the subgoal list. It then processes the next goal in the list (if there is one)
-    #End Rem
+    #End
     Method ProcessSubgoals:Int()
         'remove all completed and failed goals from the front of the subgoal list
-        While(Not Self.m_SubGoals.IsEmpty() And (Goal(Self.m_SubGoals.First()).IsComplete() Or Goal(Self.m_SubGoals.First()).HasFailed()))
-            Goal(Self.m_SubGoals.First()).Terminate()
+		While ( Not Self.m_SubGoals.IsEmpty() And (Self.m_SubGoals.First().IsComplete() Or Self.m_SubGoals.First().HasFailed()))
+            Self.m_SubGoals.First().Terminate()
             Self.m_SubGoals.RemoveFirst()
         Wend
 
         'if any subgoals remain, process the one at the front of the list
         If Not Self.m_SubGoals.IsEmpty()
             'grab the status of the front-most subgoal
-            Local StatusOfSubGoals:Int = Goal(Self.m_SubGoals.First()).Process()
+            Local StatusOfSubGoals:Int = Self.m_SubGoals.First().Process()
             'we have to test for the special case where the front-most subgoal
             'reports 'completed' *and* the subgoal list contains additional goals.When
             'this is the case, to ensure the parent keeps processing its subgoal list
@@ -74,49 +74,49 @@ Class GoalComposite Extends Goal Abstract
 
     #Rem
         bbdoc: passes the message To the front - most subgoal
-    #End Rem
+    #End
     Method ForwardMessageToFrontMostSubgoal:Int(Message:Object)
         If Not Self.m_SubGoals.IsEmpty()
-            Return Goal(Self.m_SubGoals.First()).HandleMessage(Message)
+            Return Self.m_SubGoals.First().HandleMessage(Message)
         End If
         Return False
     End Method
 
     #Rem
         bbdoc: logic to run when the goal is activated.
-    #End Rem
+    #End
     Method Activate:Void() Abstract
 
     #Rem
         bbdoc: logic To run each update-Step
-    #End Rem
+    #End
     Method Process:Int() Abstract
 
     #Rem
         bbdoc: logic To run when the goal is satisfied. (typically used To switch off, For example, any active steering behaviors)
-    #End Rem
+    #End
     Method Terminate:Void() Abstract
 
     #Rem
         bbdoc: if a child class of TGoalComposite does not define a message handler the default behavior is to forward the message to the front-most goal
-    #End Rem
+    #End
     Method HandleMessage:Int(message:Object)
         Return Self.ForwardMessageToFrontMostSubgoal(message)
     End Method
 
     #Rem
         bbdoc: adds a subgoal to the front of the subgoal list
-    #End Rem
-    Method AddSubgoal:Void(goal:Goal)
+    #End
+    Method AddSubgoal:Void(goal:Goal<T>)
         'add the new goal to the front of the list  
         Self.m_SubGoals.AddFirst(goal)
     End Method
 
     #Rem
         bbdoc: this method iterates through the subgoals and calls each one's Terminate method before deleting the subgoal and removing it from the subgoal list
-    #End Rem
+    #End
     Method RemoveAllSubgoals:Void()
-        For Local goal:Goal = EachIn Self.m_SubGoals
+        For Local goal:Goal<T> = EachIn Self.m_SubGoals
             goal.Terminate()
             goal.Destroy()
         Next

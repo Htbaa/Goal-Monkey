@@ -32,10 +32,10 @@ Class Actor
 	End Method
 End
 
-Class BotGoalThink Extends GoalComposite
-	Field m_Evaluators:List<GoalEvaluator> = New List<GoalEvaluator>
+Class BotGoalThink Extends GoalComposite<Actor>
+	Field m_Evaluators:List<GoalEvaluator<T>> = New List<GoalEvaluator<T>>
 
-	Method New(owner:Object, type:Int)
+	Method New(owner:T, type:Int)
 		Super.New(owner, type)
 		Self.m_Evaluators.AddLast(New BotSingGoalEvaluate(1.0))
 		Self.m_Evaluators.AddLast(New BotJumpGoalEvaluate(1.0))
@@ -66,13 +66,13 @@ Class BotGoalThink Extends GoalComposite
 	#Rem
 		bbdoc: this method iterates through each goal evaluator and selects the one
 		that has the highest score as the current goal
-	#End Rem
+	#End
 	Method Arbitrate:Void()
 		Local best:Float = 0
-		Local MostDesirable:GoalEvaluator
+		Local MostDesirable:GoalEvaluator<T>
 		
-		For Local curDes:GoalEvaluator = EachIn Self.m_Evaluators
-			Local desirability:Float = GoalEvaluator(curDes).CalculateDesirability(Self.m_pOwner)
+		For Local curDes:GoalEvaluator<T> = EachIn Self.m_Evaluators
+			Local desirability:Float = curDes.CalculateDesirability(Self.m_pOwner)
 			If desirability >= best
 				best = desirability
 				MostDesirable = curDes
@@ -89,10 +89,10 @@ Class BotGoalThink Extends GoalComposite
 	
 	#Rem
 		bbdoc: returns true if the given goal is not at the front of the subgoal list 
-	#End Rem
+	#End
 	Method NotPresent:Int(GoalType:Int)
 		If Not Self.m_SubGoals.IsEmpty()
-			Return Not Goal(Self.m_SubGoals.First()).GetType() = GoalType
+			Return Not Self.m_SubGoals.First().GetType() = GoalType
 		End If
 		Return True
 	End Method
@@ -114,8 +114,8 @@ Class BotGoalThink Extends GoalComposite
 	
 End
 
-Class BotGoalFart Extends Goal
-	Method New(owner:Object, type:Int)
+Class BotGoalFart Extends Goal<Actor>
+	Method New(owner:T, type:Int)
 		Super.New(owner, type)
 	End Method
 	
@@ -136,8 +136,8 @@ Class BotGoalFart Extends Goal
 	End Method
 End
 
-Class BotGoalSing Extends GoalComposite
-	Method New(owner:Object, type:Int)
+Class BotGoalSing Extends GoalComposite<Actor>
+	Method New(owner:T, type:Int)
 		Super.New(owner, type)
 	End Method
 	
@@ -145,7 +145,7 @@ Class BotGoalSing Extends GoalComposite
 		Self.m_iStatus = STATUS_ACTIVE
 		Self.RemoveAllSubgoals()
 		Self.AddSubgoal(New BotGoalJump(Self.m_pOwner, GOAL_JUMP))
-		Self.AddSubgoal(New BotGoalFart(Self, GOAL_FART))
+		Self.AddSubgoal(New BotGoalFart(Self.m_pOwner, GOAL_FART))
 	End Method
 	
 	Method Process:Int()
@@ -158,31 +158,31 @@ Class BotGoalSing Extends GoalComposite
 	End Method
 	
 	Method Terminate:Void()
-		Actor(Self.m_pOwner).currentSong = ""
+		Self.m_pOwner.currentSong = ""
 	End Method
 End
 
-Class BotSingGoalEvaluate Extends GoalEvaluator
+Class BotSingGoalEvaluate Extends GoalEvaluator<Actor>
 	Method New(bias:Float)
 		Super.New(bias)
 	End Method
 	
-	Method CalculateDesirability:Float(Owner:Object)
+	Method CalculateDesirability:Float(Owner:T)
 		'Sing a song once
-		If Actor(Owner).currentSong.Length = 0' <> Null
+		If Owner.currentSong.Length = 0' <> Null
 			Return 0.0
 		Else
 			Return Rnd()
 		End If
 	End Method
 	
-	Method SetGoal:Void(Owner:Object)
-		Actor(Owner).m_pBrain.AddGoal_Sing()
+	Method SetGoal:Void(Owner:T)
+		Owner.m_pBrain.AddGoal_Sing()
 	End Method
 End
 
-Class BotGoalJump Extends GoalComposite
-	Method New(owner:Object, type:Int)
+Class BotGoalJump Extends GoalComposite<Actor>
+	Method New(owner:Actor, type:Int)
 		Super.New(owner, type)
 	End Method
 
@@ -205,17 +205,17 @@ Class BotGoalJump Extends GoalComposite
 	End Method
 End
 
-Class BotJumpGoalEvaluate Extends GoalEvaluator
+Class BotJumpGoalEvaluate Extends GoalEvaluator<Actor>
 	Method New(bias:Float)
 		Super.New(bias)
 	End Method
 
-	Method CalculateDesirability:Float(Owner:Object)
+	Method CalculateDesirability:Float(Owner:T)
 		Return Rnd()
 	End Method
 	
-	Method SetGoal:Void(Owner:Object)
-		Actor(Owner).m_pBrain.AddGoal_Jump()
+	Method SetGoal:Void(Owner:T)
+		Owner.m_pBrain.AddGoal_Jump()
 	End Method
 End
 
