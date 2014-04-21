@@ -96,28 +96,28 @@ Class Goal<T> Abstract
     #Rem
         bbdoc: Check if goal has been completed
     #End
-    Method IsComplete:Int()
+    Method IsComplete:Bool()
         Return Self.m_iStatus = STATUS_COMPLETED
     End Method
 
     #Rem
         bbdoc: Check if goal is still active
     #End
-    Method IsActive:Int()
+    Method IsActive:Bool()
         Return Self.m_iStatus = STATUS_ACTIVE
     End Method
 
     #Rem
         bbdoc: Check if goal is inactive
     #End
-    Method IsInactive:Int()
+    Method IsInactive:Bool()
         Return Self.m_iStatus = STATUS_INACTIVE
     End Method
 
     #Rem
         bbdoc: Check if goal failed to perform its tasks
     #End
-    Method HasFailed:Int()
+    Method HasFailed:Bool()
         Return Self.m_iStatus = STATUS_FAILED
     End Method
 
