@@ -50,8 +50,7 @@ Class GoalComposite<T> Extends Goal<T> Abstract
     Method ProcessSubgoals:Int()
         'remove all completed and failed goals from the front of the subgoal list
 		While ( Not Self.m_SubGoals.IsEmpty() And (Self.m_SubGoals.First().IsComplete() Or Self.m_SubGoals.First().HasFailed()))
-            Self.m_SubGoals.First().Terminate()
-            Self.m_SubGoals.RemoveFirst()
+            Self.m_SubGoals.RemoveFirst().Terminate()
         Wend
 
         'if any subgoals remain, process the one at the front of the list
