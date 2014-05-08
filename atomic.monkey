@@ -82,7 +82,7 @@ Class Goal<T> Abstract
     #Rem
         bbdoc: goals can handle messages. Many don't though, so this defines a default behavior
     #End
-    Method HandleMessage:Int(message:Object)
+    Method HandleMessage:Bool(message:Object)
         Return False
     End Method
 

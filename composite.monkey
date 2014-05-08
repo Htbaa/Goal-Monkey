@@ -74,7 +74,7 @@ Class GoalComposite<T> Extends Goal<T> Abstract
     #Rem
         bbdoc: passes the message To the front - most subgoal
     #End
-    Method ForwardMessageToFrontMostSubgoal:Int(Message:Object)
+    Method ForwardMessageToFrontMostSubgoal:Bool(Message:Object)
         If Not Self.m_SubGoals.IsEmpty()
             Return Self.m_SubGoals.First().HandleMessage(Message)
         End If
@@ -99,7 +99,7 @@ Class GoalComposite<T> Extends Goal<T> Abstract
     #Rem
         bbdoc: if a child class of TGoalComposite does not define a message handler the default behavior is to forward the message to the front-most goal
     #End
-    Method HandleMessage:Int(message:Object)
+    Method HandleMessage:Bool(message:Object)
         Return Self.ForwardMessageToFrontMostSubgoal(message)
     End Method
 
