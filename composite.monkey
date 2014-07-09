@@ -32,8 +32,8 @@ Class GoalComposite<T> Extends Goal<T> Abstract
     #Rem
         bbdoc: note how goals start off in the inactive state
     #End
-    Method New(pOwner:T, iType:Int)
-        Super.New(pOwner, iType)
+    Method New(pOwner:T, iType:Int, sName:String = "Unnamed GoalComposite")
+        Super.New(pOwner, iType, sName)
     End Method
 
     #Rem

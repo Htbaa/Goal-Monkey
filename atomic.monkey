@@ -37,13 +37,16 @@ Class Goal<T> Abstract
     Field m_pOwner:T
     Field m_iStatus:Int
 
+	Field m_sName:String
+	
     #Rem
         bbdoc: note how goals start off in the inactive state
     #End
-    Method New(pOwner:T, iType:Int)
+    Method New(pOwner:T, iType:Int, sName:String = "UnnamedGoal")
         Self.m_iStatus = STATUS_INACTIVE
         Self.m_pOwner = pOwner
         Self.m_iType = iType
+		Self.m_sName = sName
     End Method
 
     #Rem
@@ -134,5 +137,18 @@ Class Goal<T> Abstract
     Method Destroy:Void()
         Self.m_pOwner = Null
     End Method
-
+	
+	#Rem
+		Summary: Retrieve name of goal
+	#END
+	Method Name:String() Property
+		Return Self.m_sName
+	End
+	
+	#Rem
+		Summary: Set name of goal
+	#END
+	Method Name:Void(sName:String) Property
+		Self.m_sName = sName
+	End
 End
