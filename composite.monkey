@@ -111,6 +111,22 @@ Class GoalComposite<T> Extends Goal<T> Abstract
         Self.m_SubGoals.AddFirst(goal)
     End Method
 
+	#Rem
+	bbdoc: adds a subgoal to the front of the subgoal list
+	#End
+	Method AddFirstSubgoal:Void(goal:Goal<T>)
+		'add the new goal to the front of the list
+		Self.AddSubgoal(goal)
+	End Method
+
+	#Rem
+	bbdoc: adds a subgoal to the end of the subgoal list
+	#End
+	Method AddLastSubgoal:Void(goal:Goal<T>)
+		'add the new goal to the front of the list
+		Self.m_SubGoals.AddLast(goal)
+	End Method
+
     #Rem
         bbdoc: this method iterates through the subgoals and calls each one's Terminate method before deleting the subgoal and removing it from the subgoal list
     #End
