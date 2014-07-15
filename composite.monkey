@@ -24,20 +24,20 @@ Import goal
 #End
 
 #Rem
-    bbdoc: Composite goal type
+    Summary: Composite goal type
 #End
 Class GoalComposite<T> Extends Goal<T> Abstract
     Field m_SubGoals:List<Goal<T>> = New List<Goal<T>>
 
     #Rem
-        bbdoc: note how goals start off in the inactive state
+        Summary: note how goals start off in the inactive state
     #End
     Method New(pOwner:T, iType:Int, sName:String = "Unnamed GoalComposite")
         Super.New(pOwner, iType, sName)
     End Method
 
     #Rem
-        bbdoc: when this Object is destroyed make sure any subgoals are terminated and destroyed
+        Summary: when this Object is destroyed make sure any subgoals are terminated and destroyed
     #End
     Method Destroy:Void()
         Self.RemoveAllSubgoals()
@@ -45,7 +45,7 @@ Class GoalComposite<T> Extends Goal<T> Abstract
     End Method
 
     #Rem
-        bbdoc: processes any subgoals that may be present this method first removes any completed goals from the front of the subgoal list. It then processes the next goal in the list (if there is one)
+        Summary: processes any subgoals that may be present this method first removes any completed goals from the front of the subgoal list. It then processes the next goal in the list (if there is one)
     #End
     Method ProcessSubgoals:Int()
         'remove all completed and failed goals from the front of the subgoal list
@@ -72,7 +72,7 @@ Class GoalComposite<T> Extends Goal<T> Abstract
     End Method
 
     #Rem
-        bbdoc: passes the message To the front - most subgoal
+        Summary: passes the message To the front - most subgoal
     #End
     Method ForwardMessageToFrontMostSubgoal:Bool(Message:Object)
         If Not Self.m_SubGoals.IsEmpty()
@@ -82,29 +82,29 @@ Class GoalComposite<T> Extends Goal<T> Abstract
     End Method
 
     #Rem
-        bbdoc: logic to run when the goal is activated.
+        Summary: logic to run when the goal is activated.
     #End
     Method Activate:Void() Abstract
 
     #Rem
-        bbdoc: logic To run each update-Step
+        Summary: logic To run each update-Step
     #End
     Method Process:Int() Abstract
 
     #Rem
-        bbdoc: logic To run when the goal is satisfied. (typically used To switch off, For example, any active steering behaviors)
+        Summary: logic To run when the goal is satisfied. (typically used To switch off, For example, any active steering behaviors)
     #End
     Method Terminate:Void() Abstract
 
     #Rem
-        bbdoc: if a child class of TGoalComposite does not define a message handler the default behavior is to forward the message to the front-most goal
+        Summary: if a child class of TGoalComposite does not define a message handler the default behavior is to forward the message to the front-most goal
     #End
     Method HandleMessage:Bool(message:Object)
         Return Self.ForwardMessageToFrontMostSubgoal(message)
     End Method
 
     #Rem
-        bbdoc: adds a subgoal to the front of the subgoal list
+        Summary: adds a subgoal to the front of the subgoal list
     #End
     Method AddSubgoal:Void(goal:Goal<T>)
         'add the new goal to the front of the list  
@@ -112,7 +112,7 @@ Class GoalComposite<T> Extends Goal<T> Abstract
     End Method
 
 	#Rem
-	bbdoc: adds a subgoal to the front of the subgoal list
+	Summary: adds a subgoal to the front of the subgoal list
 	#End
 	Method AddFirstSubgoal:Void(goal:Goal<T>)
 		'add the new goal to the front of the list
@@ -120,7 +120,7 @@ Class GoalComposite<T> Extends Goal<T> Abstract
 	End Method
 
 	#Rem
-	bbdoc: adds a subgoal to the end of the subgoal list
+	Summary: adds a subgoal to the end of the subgoal list
 	#End
 	Method AddLastSubgoal:Void(goal:Goal<T>)
 		'add the new goal to the front of the list
@@ -128,7 +128,7 @@ Class GoalComposite<T> Extends Goal<T> Abstract
 	End Method
 
     #Rem
-        bbdoc: this method iterates through the subgoals and calls each one's Terminate method before deleting the subgoal and removing it from the subgoal list
+        Summary: this method iterates through the subgoals and calls each one's Terminate method before deleting the subgoal and removing it from the subgoal list
     #End
     Method RemoveAllSubgoals:Void()
         For Local goal:Goal<T> = EachIn Self.m_SubGoals

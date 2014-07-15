@@ -22,7 +22,7 @@ Strict
 #End
 
 #Rem
-    bbdoc: Base class to create a goal evaluator
+    Summary: Base class to create a goal evaluator
 #End
 Class GoalEvaluator<T> Abstract
     'when the desirability score for a goal has been evaluated it is multiplied 
@@ -31,19 +31,19 @@ Class GoalEvaluator<T> Abstract
     Field m_dCharacterBias:Float
 
     #Rem
-        bbdoc: Object creation
+        Summary: Object creation
     #End
     Method New(CharacterBias:Float)
         Self.m_dCharacterBias = CharacterBias
     End Method
 
     #Rem
-        bbdoc: returns a score between 0 and 1 representing the desirability of the strategy the concrete subclass represents
+        Summary: returns a score between 0 and 1 representing the desirability of the strategy the concrete subclass represents
     #End
     Method CalculateDesirability:Float(Owner:T) Abstract
 
     #Rem
-        bbdoc: adds the appropriate goal to the given bot's brain
+        Summary: adds the appropriate goal to the given bot's brain
     #End
     Method SetGoal:Void(Owner:T) Abstract
 End
